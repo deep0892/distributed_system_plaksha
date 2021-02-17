@@ -1,0 +1,154 @@
+Write result:
+status {
+  server_id: 2
+  ok: true
+}
+key: "ShardKey0"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "ShardKey1"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 2
+  ok: true
+}
+key: "ShardKey2"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "ShardKey3"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 2
+  ok: true
+}
+key: "ShardKey4"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "ShardKey5"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 2
+  ok: true
+}
+key: "ShardKey6"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "ShardKey7"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 2
+  ok: true
+}
+key: "ShardKey8"
+new_version: 1
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "ShardKey9"
+new_version: 1
+
+-------------------------------------------------------------------
+List result:
+status {
+  server_id: 1
+  ok: true
+}
+entries {
+  key: "ShardKey1"
+  value: "Value1"
+  current_version: 1
+}
+entries {
+  key: "ShardKey3"
+  value: "Value3"
+  current_version: 1
+}
+entries {
+  key: "ShardKey5"
+  value: "Value5"
+  current_version: 1
+}
+entries {
+  key: "ShardKey7"
+  value: "Value7"
+  current_version: 1
+}
+entries {
+  key: "ShardKey9"
+  value: "Value9"
+  current_version: 1
+}
+
+-------------------------------------------------------------------
+List result:
+status {
+  server_id: 2
+  ok: true
+}
+entries {
+  key: "ShardKey0"
+  value: "Value0"
+  current_version: 1
+}
+entries {
+  key: "ShardKey2"
+  value: "Value2"
+  current_version: 1
+}
+entries {
+  key: "ShardKey4"
+  value: "Value4"
+  current_version: 1
+}
+entries {
+  key: "ShardKey6"
+  value: "Value6"
+  current_version: 1
+}
+entries {
+  key: "ShardKey8"
+  value: "Value8"
+  current_version: 1
+}
+
+-------------------------------------------------------------------

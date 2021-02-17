@@ -1,0 +1,174 @@
+Write Result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key1"
+new_version: 1
+
+-------------------------------------------------------------------
+Write Result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key1"
+new_version: 2
+
+-------------------------------------------------------------------
+Write Result:
+status {
+  server_id: 1
+  error: "Write aborted. Record version mismatch. Expected = 1, Actual = 2"
+}
+key: "Key1"
+new_version: 2
+
+-------------------------------------------------------------------
+Write Result:
+status {
+  server_id: 1
+  error: "Write aborted. Record missing but Write expected value to exist at version 1"
+}
+key: "Key2"
+new_version: 2
+
+-------------------------------------------------------------------
+Read Result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key1"
+value: "Value2"
+current_version: 2
+
+-------------------------------------------------------------------
+Read Result:
+status {
+  server_id: 1
+  error: "Read aborted. Key not present Key2"
+}
+
+-------------------------------------------------------------------
+List Result:
+status {
+  server_id: 1
+  ok: true
+}
+entries {
+  key: "Key1"
+  value: "Value2"
+  current_version: 2
+}
+
+-------------------------------------------------------------------
+Write Result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key3"
+new_version: 1
+
+-------------------------------------------------------------------
+List Result:
+status {
+  server_id: 1
+  ok: true
+}
+entries {
+  key: "Key1"
+  value: "Value2"
+  current_version: 2
+}
+entries {
+  key: "Key3"
+  value: "Value3"
+  current_version: 1
+}
+
+-------------------------------------------------------------------
+Delete Result:
+status {
+  server_id: 1
+  error: "Delete aborted. Record version mismatch: Expected = 1, Actual = 2"
+}
+
+-------------------------------------------------------------------
+Delete Result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key1"
+deleted_value: "Value2"
+deleted_version: 2
+
+-------------------------------------------------------------------
+Delete Result:
+status {
+  server_id: 1
+  error: "Key not present Key1"
+}
+
+-------------------------------------------------------------------
+Delete Result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key3"
+deleted_value: "Value3"
+deleted_version: 1
+
+-------------------------------------------------------------------
+List Result:
+status {
+  server_id: 1
+  ok: true
+}
+
+-------------------------------------------------------------------
+Write Result:
+status {
+  server_id: 1
+  error: "Invalid write proto value: \"Value\"\n"
+}
+
+-------------------------------------------------------------------
+Write Result:
+status {
+  server_id: 1
+  error: "Invalid write proto key: \"Key\"\n"
+}
+
+-------------------------------------------------------------------
+Write Result:
+status {
+  server_id: 1
+  error: "Invalid write proto "
+}
+
+-------------------------------------------------------------------
+Read Result:
+status {
+  server_id: 1
+  error: "Invalid read proto "
+}
+
+-------------------------------------------------------------------
+Delete Result:
+status {
+  server_id: 1
+  error: "Invalid delete proto current_version: 10\n"
+}
+
+-------------------------------------------------------------------
+Delete Result:
+status {
+  server_id: 1
+  error: "Invalid delete proto key: \"Key1\"\n"
+}
+
+-------------------------------------------------------------------

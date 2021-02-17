@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "org.plaksha.distcourse.keyval";
+option java_outer_classname = "KeyValProto";
+option objc_class_prefix = "KV";
+
+package keyval;
+
+// The protocol description for a simple remote key-value store with
+// basic read/write/delete/list operations.
+service KeyValue {
+  // Read the value of the given key.
+  rpc Read(ReadRequest) returns (ReadResponse) {}
+
+  // Write the given value for the given key under certain conditions
+  rpc Write(WriteRequest) returns (WriteResponse) {}
+
+  // Delete the given key if the key exists.
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+
+  // List all the keys, values and versions in the key value store
+  rpc List(ListRequest) returns (ListResponse) {}
+}
+
+// A status message to indicate success or failue of an RPC
+message Status {
+  int32 server_id = 1; // Id of the server that is responding
+  bool ok = 2; // If the request executed successfully at the server
+  string error = 3; // if ok == False, a human-readable eror string
+}
+
+// Read the given key from the remote store
+message ReadRequest {
+  string key = 1;
+}
+
+// The respnose to a read request.
+message ReadResponse {
+  Status status = 1; // Whether the request succeeded or not
+  // The following fields are only valid if stauts.ok is True
+  string key = 2; // The key passed in to the read request
+  string value = 3; // The value of the request key
+  int32 current_version = 4; // The current version of the requested value
+}
+
+// Create or update the value of the given key
+message WriteRequest {
+  string key = 1; // The key whose value is being changed.
+  string value = 2; // The new value
+  // The expected version of the existing value. The server performs a
+  // version check if current_version matches what the server has. The
+  // server performs this version check to avoid lost updates. If
+  // current_version < 0, the server treats it as a "blind write",
+  // i.e., it does perform the version check. current_version = 0 is
+  // invalid. Versions start from 1 and are incremented by 1 on each
+  // update. When a blind write succeeds, the version is set to 1.
+  int32 current_version = 3;
+}
+
+// The response to the write request.
+message WriteResponse {
+  Status status = 1; // Whether the request succeeded.
+  string key = 2; // The key passed in to the write request
+  int32 new_version = 3; // The new version of the object (if status is ok)
+}
+
+// A request to delete the given key.
+message DeleteRequest {
+  string key = 1;
+  // See WriteRequest for the description of a similar field. The
+  // semantics are exactly the same in terms of the version check.
+  int32 current_version = 2;
+}
+
+// The response to a Delete request.
+message DeleteResponse {
+  Status status = 1;
+  string key = 2; // The key passed in to the deleted request
+  // The following fields are only valid if status.ok is True
+  string deleted_value = 3;
+  int32 deleted_version = 4;
+}
+
+// A request to list the full map entries.
+message ListRequest {
+}
+
+// The response of a List request.
+message ListResponse {
+  Status status = 1; // Whether the request succeeded or not
+  repeated Entry entries = 2; // The entries in the remote store
+}
+
+// An entry in the remote store with for a given key, its current
+// value and version.
+message Entry {
+  string key = 1;
+  string value = 2;
+  int32 current_version = 3;
+}

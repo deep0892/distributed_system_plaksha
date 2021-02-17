@@ -1,0 +1,57 @@
+Simple client and server
+------------------------
+python3 keyval_server_group00.py
+python3 keyval_client_group00.py >| /tmp/foo
+diff client_single_server_results.txt /tmp/foo
+
+python3 keyval_driver.py >| /tmp/bar
+diff keyval_driver_results.txt /tmp/bar
+
+Timeouts
+---------
+
+python3 keyval_server_group00.py --write_delay=1
+
+python3 keyval_client_timeouts_group00.py --timeout=0.5 --skip
+python3 keyval_client_timeouts_group00.py --timeout=1.5 --skip
+python3 keyval_client_timeouts_group00.py --timeout=0.5
+python3 keyval_client_timeouts_group00.py --timeout=1.5
+
+Sharded
+-------
+python3 keyval_server_group00.py --server_id=1 --port=50050&
+python3 keyval_server_group00.py --server_id=2 --port=50051&
+
+python3 keyval_client_sharded_group00.py >| /tmp/foo
+diff client_sharded_server_results.txt /tmp/foo
+
+-----------------------------------------------------------------
+For Windows
+-----------------------------------------------------------------
+
+Simple client and server
+------------------------
+python keyval_server_group00.py
+python keyval_client_group00.py > /tmp/foo
+diff client_single_server_results.txt /tmp/foo
+
+python keyval_driver.py > /tmp/bar
+diff keyval_driver_results.txt /tmp/bar
+
+Timeouts
+---------
+
+python keyval_server_group00.py --write_delay=1
+
+python keyval_client_timeouts_group00.py --timeout=0.5 --skip
+python keyval_client_timeouts_group00.py --timeout=1.5 --skip
+python keyval_client_timeouts_group00.py --timeout=0.5
+python keyval_client_timeouts_group00.py --timeout=1.5
+
+Sharded
+-------
+python keyval_server_group00.py --server_id=1 --port=50050&
+python keyval_server_group00.py --server_id=2 --port=50051&
+
+python keyval_client_sharded_group00.py > /tmp/foo
+diff client_sharded_server_results.txt /tmp/foo
