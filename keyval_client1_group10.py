@@ -39,9 +39,9 @@ def Write(stub, obj):
 def List(stub):
     res = stub.List(keyval_pb2.ListRequest())
     save_to_disk(res, 'List')
-    print("List result:")
-    print("Entries: {}".format(res), '')
-    print('-------------------------------------------------------------------')
+    print("List result:\n")
+    print("Entries: {}".format(res), '\n')
+    print('-------------------------------------------------------------------\n')
     return
 
 
@@ -59,7 +59,7 @@ def run():
         with grpc.insecure_channel('localhost:50050') as channel:
             stub = keyval_pb2_grpc.KeyValueStub(channel)
 
-            # operations to be performed
+            # operations to be performed as stated in client implementation.
             # Blind write: Write Key1, Value1 with no version check
             Write(stub, {'key':'Key1','value':'Value1','current_version':-1})
             
