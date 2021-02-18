@@ -1,0 +1,19 @@
+Experiment 1:
+
+Questions:
+A. For each of the Write RPC sets above, count the number of RPCs that were successful and the number that were unsuccessful.
+
+Successful RPCs: 5 ( 5 Write with 1.5s timeout succeeded)
+Unsuccessful RPCs: 5 ( 5 Write with 0.5s timeout failed)
+
+B. If the numbers are different for the 2 scenarios, can you explain why? If the numbers are the same for the 2 scenarios, can you explain why?
+
+The number of successful RPCs is different in both the cases because the server write_delay of 1 sec was greater than the 0.5s timeout provided to the write RPC call in Experiment 1 A and smaller than the 1.5sec timeout provided in the experiment 1 B. 
+The timeout allowed the RPC call to succeed in one case and tieout exception in the other.
+
+C. What did List return in both cases? Why?
+
+The List opration in the both the cases resulted in the same out of the dictionary containing all the 5 keys becuase even though the 
+RPC call reponse back to the client failed due to timeout, the request was still completed on server. The Timeout of 5 sec in the 
+A part also helped in the completion of all Write request before List was called and 1.5 sec timeout in part B allowed all Write requests
+to complete before List being called.

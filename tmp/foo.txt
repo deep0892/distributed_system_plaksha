@@ -130,114 +130,6 @@ status {
 }
 
 -------------------------------------------------------------------
-Write result:
-status {
-  server_id: 1
-  ok: true
-}
-key: "Key1"
-new_version: 1
-
--------------------------------------------------------------------
-Write result:
-status {
-  server_id: 1
-  ok: true
-}
-key: "Key1"
-new_version: 2
-
--------------------------------------------------------------------
-Write result:
-status {
-  server_id: 1
-  error: "Write aborted. Record version mismatch. Expected = 1, Actual = 2"
-}
-key: "Key1"
-new_version: 2
-
--------------------------------------------------------------------
-Write result:
-status {
-  server_id: 1
-  error: "Write aborted. Record missing but Write expected value to exist at version 1"
-}
-key: "Key2"
-new_version: 2
-
--------------------------------------------------------------------
-Read result:
-status {
-  server_id: 1
-  ok: true
-}
-key: "Key1"
-value: "Value2"
-current_version: 2
-
--------------------------------------------------------------------
-Read result:
-status {
-  server_id: 1
-  error: "Read aborted. Key not present Key2"
-}
-
--------------------------------------------------------------------
-List result:
-status {
-  server_id: 1
-  ok: true
-}
-entries {
-  key: "Key1"
-  value: "Value2"
-  current_version: 2
-}
-
--------------------------------------------------------------------
-Write result:
-status {
-  server_id: 1
-  ok: true
-}
-key: "Key3"
-new_version: 1
-
--------------------------------------------------------------------
-List result:
-status {
-  server_id: 1
-  ok: true
-}
-entries {
-  key: "Key1"
-  value: "Value2"
-  current_version: 2
-}
-entries {
-  key: "Key3"
-  value: "Value3"
-  current_version: 1
-}
-
--------------------------------------------------------------------
-Delete result:
-status {
-  server_id: 1
-  error: "Delete aborted. Record version mismatch: Expected = 1, Actual = 2"
-}
-
--------------------------------------------------------------------
-Delete result:
-status {
-  server_id: 1
-  ok: true
-}
-key: "Key1"
-deleted_value: "Value2"
-deleted_version: 2
-
--------------------------------------------------------------------
 Delete result:
 status {
   server_id: 1
@@ -245,13 +137,34 @@ status {
 }
 
 -------------------------------------------------------------------
+List result:
+status {
+  server_id: 1
+  ok: true
+}
+entries {
+  key: "Key1"
+  value: "Value1"
+  current_version: 1
+}
+
+-------------------------------------------------------------------
+Write result:
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key1"
+new_version: 1
+
+-------------------------------------------------------------------
 Delete result:
 status {
   server_id: 1
   ok: true
 }
-key: "Key3"
-deleted_value: "Value3"
+key: "Key1"
+deleted_value: "Value1"
 deleted_version: 1
 
 -------------------------------------------------------------------

@@ -1,0 +1,90 @@
+Experiment 2:
+
+Questions:
+1. Which Write and Delete calls succeeded and which calls failed?
+
+The Write RPCall in Part A fails due to timeout.
+The Delete RPCall in part A wasn't able to delete the key because the Write RPCall hasn't complete the write 
+operation.
+
+The Write RPCall in Part B completes successfully.
+The Delete RPCall in part B was able to delete the key because the Write RPCallhas completed the write 
+operation.
+
+
+2. Did List return the same result in A and B? Why or why not?
+
+No the List call did not return the same result.
+Since the Delete call in the Part A was called before the write call could complete the task, the 
+key did not get deleted and hence the List return the Key value pair in the Part A of the experiment.
+In the Part B which has timeout of 1.5sec and was able to complete the delete operation gave an empty object 
+as the key value pair successful got deleted.
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+Output from PART A:
+<_InactiveRpcError of RPC that terminated with:
+        status = StatusCode.DEADLINE_EXCEEDED
+        details = "Deadline Exceeded"
+        debug_error_string = "{"created":"@1613633896.539503000","description":"Error received from peer ipv6:[::1]:50050","file":"src/core/lib/surface/call.cc","file_line":1063,"grpc_message":"Deadline Exceeded","grpc_status":4}"
+>
+Delete result:
+
+status {
+  server_id: 1
+  error: "Key not present Key1"
+}
+ 
+
+-------------------------------------------------------------------
+
+List result:
+
+Entries: status {
+  server_id: 1
+  ok: true
+}
+entries {
+  key: "Key1"
+  value: "Value1"
+  current_version: 1
+}
+ 
+
+---------------------------------------------------------------------------------------------------------------------
+Output from PART B
+
+Write result:
+
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key1"
+new_version: 1
+ 
+
+-------------------------------------------------------------------
+
+Delete result:
+
+status {
+  server_id: 1
+  ok: true
+}
+key: "Key1"
+deleted_value: "Value1"
+deleted_version: 1
+ 
+
+-------------------------------------------------------------------
+
+List result:
+
+Entries: status {
+  server_id: 1
+  ok: true
+}
+ 
+
+-------------------------------------------------------------------

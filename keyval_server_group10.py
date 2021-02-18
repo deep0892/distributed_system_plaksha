@@ -21,7 +21,7 @@ def parseArgs():
     parser = argparse.ArgumentParser(description="Key-value store server.")
     parser.add_argument("--server_id", default="1",
                         help="The id of the server (e.g., 1 or 2)")
-    parser.add_argument("--write_delay", default="1",
+    parser.add_argument("--write_delay", default="0",
                         help=" The delay in seconds that is added to the Write RPC handling in the server, i.e., before the Write RPC is handled on the server side.")
     parser.add_argument("--port", default="50050",
                         help="The port on which the server listens. Default: 50050")
@@ -50,34 +50,38 @@ class KeyValueServicer(keyval_pb2_grpc.KeyValueServicer):
         value = request.value
         current_version = request.current_version
         error = ''
-        
-        if not key:
-            error = f"Write aborted. Key not present"
-            return keyval_pb2.WriteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error), key=key)
+        try:
+            time.sleep(float(args.write_delay))
+            if not key:
+                error = f"Write aborted. Key not present"
+                return keyval_pb2.WriteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error), key=key)
 
-        if not value:
-            error = f"Write aborted. Value not present"
-            return keyval_pb2.WriteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error), key=key)
+            if not value:
+                error = f"Write aborted. Value not present"
+                return keyval_pb2.WriteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error), key=key)
 
-        status = keyval_pb2.Status(server_id=int(args.server_id), ok=True)
-        temp = store.get(key, {})
-        
-        if 'current_version' in temp and  current_version > 0 and current_version != temp['current_version']:
-            error = f"Write aborted. Record version mismatch. Expected = {current_version}, Actual = {temp['current_version']}"
-            return keyval_pb2.WriteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error), key=key, new_version=temp['current_version'])
-        elif 'current_version' not in temp and  current_version > 0 :
-            error = f"Write aborted. Record missing but Write expected value to exist at version 1"
+            status = keyval_pb2.Status(server_id=int(args.server_id), ok=True)
+            temp = store.get(key, {})
+            
+            if 'current_version' in temp and  current_version > 0 and current_version != temp['current_version']:
+                error = f"Write aborted. Record version mismatch. Expected = {current_version}, Actual = {temp['current_version']}"
+                return keyval_pb2.WriteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error), key=key, new_version=temp['current_version'])
+            elif 'current_version' not in temp and  current_version > 0 :
+                error = f"Write aborted. Record missing but Write expected value to exist at version 1"
+                return keyval_pb2.WriteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error), key=key, new_version=current_version)
+
+            if not temp or current_version < 0:
+                temp['current_version'] = 1
+            else:
+                temp['current_version'] += 1
+            
+            temp[key] = value
+            store[key] = temp
+
+            return keyval_pb2.WriteResponse(status=status, key=key, new_version=temp['current_version'])
+        except grpc.RpcError as exception:
+            error = f"Write aborted. Exception: {exception}"
             return keyval_pb2.WriteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error), key=key, new_version=current_version)
-
-        if not temp or current_version < 0:
-            temp['current_version'] = 1
-        else:
-            temp['current_version'] += 1
-        
-        temp[key] = value
-        store[key] = temp
-
-        return keyval_pb2.WriteResponse(status=status, key=key, new_version=temp['current_version'])
 
     def Delete(self, request, context):
         status = keyval_pb2.Status(server_id=int(args.server_id), ok=True)
@@ -91,7 +95,7 @@ class KeyValueServicer(keyval_pb2_grpc.KeyValueServicer):
         temp = store[key]
         value = temp[key]
         
-        if temp['current_version'] != current_version:
+        if temp['current_version'] != current_version and current_version >= 0 :
             error = f"Delete aborted. Record version mismatch: Expected = {current_version}, Actual = {temp['current_version']}"
             return keyval_pb2.DeleteResponse(status=keyval_pb2.Status(server_id=int(args.server_id), ok=False, error=error))
         
@@ -120,7 +124,7 @@ def serve():
     print('Start of server ...................... at PORT: ' + args.port)
     try:
         while True:
-            time.sleep(int(args.write_delay))
+            time.sleep(float(_ONE_DAY_IN_SECONDS))
     except KeyboardInterrupt:
         server.stop(0)
 
