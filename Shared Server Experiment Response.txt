@@ -1,0 +1,8 @@
+1. Kill server 1 and run the same 10 RPCs and report what you see? 
+
+All the gRPC calls ( 5 Write RPC requests and 1 List request) to server fail with the error "failed to connect to all addresses".
+
+2. What could one do to avoid this problem that you observed in a real system?
+
+To avoid this, in case of failure of a request from server one, one can try to make the same 
+request to server 2 if the request must be fulfilled.
