@@ -202,20 +202,20 @@ def expriment1_B():
             List(stub)
             
             
-            #  Delete Key0 with current_version stated as 1
-            Delete(stub, {'key':'Key0','current_version':1})
+            #  Delete Key0 
+            Delete(stub, {'key':'Key0','current_version':-1})
             
-            # Delete Key1 with current_version stated as 1
-            Delete(stub, {'key':'Key1','current_version':1})
+            # Delete Key1 
+            Delete(stub, {'key':'Key1','current_version':-1})
             
-            # Delete Key2 with current_version stated as 1
-            Delete(stub, {'key':'Key2','current_version':1})
+            # Delete Key2 
+            Delete(stub, {'key':'Key2','current_version':-1})
             
-            # Delete Key3 with current_version stated as 1
-            Delete(stub, {'key':'Key3', 'current_version': 1})
+            # Delete Key3 
+            Delete(stub, {'key':'Key3', 'current_version':-1})
             
-            # Delete Key4 with current_version stated as 1
-            Delete(stub, {'key':'Key4','current_version':1})
+            # Delete Key4 
+            Delete(stub, {'key':'Key4','current_version':-1})
             
             # Get full state with List: List
             List(stub)
